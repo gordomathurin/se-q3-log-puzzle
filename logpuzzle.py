@@ -27,6 +27,12 @@ def read_urls(filename):
     alphabetically in increasing order, and screening out duplicates.
     """
     # +++your code here+++
+    url_holder = []
+    path = "http://" + "".join(filename.replace('animal_', ""))
+    print(path)
+    with open(filename, 'r') as f:
+        for position in f:
+            matches = re.findall(r'GET (\S+) HTTP', position)
     pass
 
 
@@ -39,7 +45,19 @@ def download_images(img_urls, dest_dir):
     Creates the directory if necessary.
     """
     # +++your code here+++
-    pass
+    if not os.path.exists(dest_dir):
+        os.makedirs(dest_dir)
+    with open(os.path.join(dest_dir, 'index.html'), 'w') as position:
+        print(position)
+        position.write('<html><body\n')
+
+    counter = 0
+    for img_url in img_urls:
+        filename = f'image{counter}'
+        print('One moment please...')
+        urllib.request.urlretrieve(img_url, os.path.join(dest_dir, filename))
+        counter.write(f'image src={filename}')
+    counter.write('\n</body></html>\n')
 
 
 def create_parser():
