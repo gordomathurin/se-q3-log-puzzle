@@ -32,8 +32,14 @@ def read_urls(filename):
     print(path)
     with open(filename, 'r') as f:
         for position in f:
-            matches = re.findall(r'GET (\S+) HTTP', position)
-    pass
+            url_matches = re.findall(r'GET (\S+) HTTP', position)
+            for match in url_matches:
+                if match not in url_holder and 'puzzle' in match:
+                    url_holder.append(match)
+    url_holder.sort(key=lambda x: x[-9:-4])
+    url_holder = list(map(lambda tag: path + tag, url_holder))
+    print(url_holder)
+    return url_holder
 
 
 def download_images(img_urls, dest_dir):
@@ -49,15 +55,14 @@ def download_images(img_urls, dest_dir):
         os.makedirs(dest_dir)
     with open(os.path.join(dest_dir, 'index.html'), 'w') as position:
         print(position)
-        position.write('<html><body\n')
-
-    counter = 0
-    for img_url in img_urls:
-        filename = f'image{counter}'
-        print('One moment please...')
-        urllib.request.urlretrieve(img_url, os.path.join(dest_dir, filename))
-        counter.write(f'image src={filename}')
-    counter.write('\n</body></html>\n')
+        position.write('<html><body>')
+        for i, img_url in enumerate(img_urls):
+            filename = f'image{i}'
+            print('One moment please...')
+            urllib.request.urlretrieve(
+                img_url, os.path.join(dest_dir, filename) + '.jpg')
+            position.write(f'<img src="{filename}.jpg">')
+        position.write('</body></html>')
 
 
 def create_parser():
