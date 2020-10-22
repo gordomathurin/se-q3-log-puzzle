@@ -28,7 +28,7 @@ def read_urls(filename):
     """
     # +++your code here+++
     url_holder = []
-    path = "http://" + "".join(filename.replace('animal_', ""))
+    path = "http://" + filename[-15:]
     print(path)
     with open(filename, 'r') as f:
         for position in f:
@@ -58,7 +58,7 @@ def download_images(img_urls, dest_dir):
         position.write('<html><body>')
         for i, img_url in enumerate(img_urls):
             filename = f'image{i}'
-            print('One moment please...')
+            print(f'Downloading img{i}')
             urllib.request.urlretrieve(
                 img_url, os.path.join(dest_dir, filename) + '.jpg')
             position.write(f'<img src="{filename}.jpg">')
@@ -86,7 +86,7 @@ def main(args):
     parsed_args = parser.parse_args(args)
 
     img_urls = read_urls(parsed_args.logfile)
-
+    print(img_urls)
     if parsed_args.todir:
         download_images(img_urls, parsed_args.todir)
     else:
